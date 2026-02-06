@@ -3,7 +3,7 @@ import prisma from '../lib/prisma.js';
 import {generateAccessToken, generateRefreshToken} from '../tokens/token.service.js';
 
 
-// Registration methods here
+// Register method
 export async function register(email:string, password: string, tenantSlug: string) {
 
     const hash = await bcrypt.hash(password, 10);

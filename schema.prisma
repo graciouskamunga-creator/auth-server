@@ -1,76 +1,77 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
+  provider = "postgresql"
 }
 
 model User {
-    id        String   @id @default(uuid())
-    email     String   @unique
-    password  String?
-    verified  Boolean  @default(false)
-    createdAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  email     String
+  password  String?
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
 
-    tenants   TenantUser[]
-    oauth     OAuthAccount[]
-    refreshTokens RefreshToken[]
+  tenants   TenantUser[]
 }
 
 model Tenant {
-    id            String   @id @default(uuid())
-    name          String
-    slug          String   @unique
-    logoUrl       String?
-    primaryColor  String?
-    domain        String?   @unique
-    createdAt     DateTime @default(now())
+  id           String   @id @default(uuid())
+  name         String
+  slug         String   @unique
+  logoUrl      String?
+  primaryColor String?
+  domain       String?  @unique
+  createdAt    DateTime @default(now())
 
-    users         TenantUser[]
+  users        TenantUser[]
 }
 
 model TenantUser {
-    id       String @id @default(uuid())
-    userId   String
-    tenantId String
-    role     Role
+  id        String @id @default(uuid())
+  userId    String
+  tenantId  String
+  role      Role
 
-    user     User   @relation(fields: [userId], references: [id])
-    tenant   Tenant @relation(fields: [tenantId], references: [id])
+  user      User   @relation(fields: [userId], references: [id])
+  tenant    Tenant @relation(fields: [tenantId], references: [id])
 
-    @@unique([userId, tenantId])
+  oauthAccounts OAuthAccount[]
+  refreshTokens RefreshToken[]
+
+  @@unique([userId, tenantId])
 }
 
 model RefreshToken {
-    id        String   @id @default(uuid())
-    userId    String
-    tenantId  String
-    tokenHash String
-    revoked   Boolean  @default(false)
-    expiresAt DateTime
+  id           String   @id @default(uuid())
+  tenantUserId String
+  tokenHash    String   @unique
+  revoked      Boolean  @default(false)
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
 
-    user      User     @relation(fields: [userId], references: [id])
-}
-
-enum Role {
-    ADMIN
-    USER
+  tenantUser   TenantUser @relation(fields: [tenantUserId], references: [id])
 }
 
 model OAuthAccount {
-    id             String        @id @default(uuid())
-    userId         String
-    provider       OAuthProvider
-    providerUserId String
-    createdAt      DateTime      @default(now())
+  id             String        @id @default(uuid())
+  tenantUserId   String
+  provider       OAuthProvider
+  providerUserId String
+  createdAt      DateTime      @default(now())
 
-    user           User          @relation(fields: [userId], references: [id])
+  tenantUser     TenantUser    @relation(fields: [tenantUserId], references: [id])
 
-    @@unique([provider, providerUserId])
+  @@unique([provider, providerUserId])
+}
+
+enum Role {
+  ADMIN
+  USER
 }
 
 enum OAuthProvider {
-    GOOGLE
-    GITHUB
+  GOOGLE
+  GITHUB
 }

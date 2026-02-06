@@ -1,6 +1,6 @@
 import type {Request, Response, NextFunction} from 'express';
 import prisma from '../lib/prisma.js';
-
+// Middleware to resolve tenant by domain
 export async function resolveTenantByDomain(
     req: Request, res: Response, next: NextFunction
 ) {

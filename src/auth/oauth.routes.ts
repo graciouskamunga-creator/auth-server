@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import passport from 'passport';
 import {generateAccessToken, generateRefreshToken} from '../tokens/token.service.js';
-
+// Google OAuth routes
 const router = Router();
 
 router.get('/google', passport.authenticate('google', {scope: ['email', 'profile']})

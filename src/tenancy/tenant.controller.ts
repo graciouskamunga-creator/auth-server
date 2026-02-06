@@ -1,6 +1,6 @@
 import type {Request, Response} from 'express';
 import {createTenant} from './tenant.service.js';
-
+// Controller for tenant-related endpoints
 export async function createTenantHandler(req: Request, res: Response) {
 
     const {name, slug} = req.body;
@@ -13,7 +13,7 @@ export async function createTenantHandler(req: Request, res: Response) {
     }
     
 }
-
+// Controller to get tenant branding info
 export async function getTenatBranding(req: Request, res: Response) {
     const tenant = (req as any).tenant;
 

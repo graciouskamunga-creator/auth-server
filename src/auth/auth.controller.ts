@@ -4,6 +4,7 @@ import Joi from 'joi';
 import * as authService from './auth.service.js';
 import logger from '../utils/logger.js';
 
+// Validation schema for registration
 export const registerSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(12).pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/).required()
@@ -12,11 +13,13 @@ export const registerSchema = Joi.object({
     }),
 });
 
+// Express-validator middleware for registration
 export const registerValidation = [
   body('email').isEmail().normalizeEmail(),
   body('password').isLength({ min: 12 }).withMessage('Password must be at least 12 characters long'),
 ];
 
+// Validation schema for login
 export async function registerHandler(req:Request, res: Response) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -37,6 +40,7 @@ try{
 
 }
 
+// Express-validator middleware for login
 export async function loginHandler(req:Request, res: Response) {
     const {email, password} = req.body;
     const tenant = (req as any).tenant;
@@ -53,6 +57,7 @@ export async function loginHandler(req:Request, res: Response) {
 
 }
 
+// Token refresh handler
 export async function refreshHandler(req:Request, res: Response) {
     const {refreshToken} = req.body;
 
@@ -64,6 +69,7 @@ export async function refreshHandler(req:Request, res: Response) {
     
 } 
 
+// Logout handler
 export async function logoutHandler(req:Request, res: Response) {
     const user = (req as any).user;
 

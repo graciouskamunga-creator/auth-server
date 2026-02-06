@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import prisma from '../lib/prisma.js';
-
+// Middleware to resolve tenant by header
 export async function resolveTenant(
   req: Request,
   res: Response,

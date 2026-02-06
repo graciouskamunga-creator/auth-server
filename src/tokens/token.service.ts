@@ -1,10 +1,14 @@
 import jwt from 'jsonwebtoken';
-
-
-export const generateAccessToken = (payload: any) => jwt.sign(payload, process.env.JWT_SECRET!, {
-    expiresIn: '15m'
+import { env } from '../config/env.js';
+// Service for token generation
+export const generateAccessToken = (payload: any) => jwt.sign(payload, env.jwt.secret, {
+    expiresIn: '15m',
+    issuer: env.jwt.issuer,
+    audience: env.jwt.audience
 });
-
-export const generateRefreshToken = (payload: any) => jwt.sign(payload, process.env.JWT_REFRESH_SECRET!, {
-    expiresIn: '30d'
+// Service for refresh token generation
+export const generateRefreshToken = (payload: any) => jwt.sign(payload, env.jwt.refreshSecret, {
+    expiresIn: '30d',
+    issuer: env.jwt.issuer,
+    audience: env.jwt.audience
 });

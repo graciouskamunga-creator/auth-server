@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import prisma from '../lib/prisma.js';
 import * as tokenService from '../tokens/token.service.js';
 
-
+// Refresh token rotation method
 export async function rotateRefreshToken(oldToken:string) {
     const payload = jwt.verify(oldToken, process.env.JWT_REFRESH_SECRET!) as any;
 

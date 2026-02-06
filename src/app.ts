@@ -21,6 +21,7 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+// Enforce HTTPS in production
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
@@ -39,6 +40,15 @@ app.use('/tenants', tenantRoutes);
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Internal server error' });
+});
+
+// A simple health check endpoint
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
 });
 
 export default app;

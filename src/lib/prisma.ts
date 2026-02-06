@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { env } from '../config/env.js';
-
+// Prisma client setup with connection pooling and adapter for PostgreSQL
 declare global {
   var prisma: PrismaClient | undefined;
 }
